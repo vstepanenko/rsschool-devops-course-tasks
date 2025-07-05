@@ -40,7 +40,7 @@ jobs:
   terraform-apply:
     name: Terraform Apply
     needs: terraform-plan
-    if: github.ref == 'refs/heads/main' || github.head_ref == 'task_3'
+    if: github.ref == 'refs/heads/main' || github.head_ref == 'task_4'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
