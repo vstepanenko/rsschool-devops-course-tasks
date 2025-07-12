@@ -74,12 +74,21 @@ resource "aws_security_group" "private_hosts_sg" {
     create_before_destroy = true
   }
 
+  # Allow access to Jenkins
+  ingress {
+    description = "Allow access to Jenkins"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = var.allowed_ssh_bastion_cidrs # Allow access through reverse proxy
+  }
+
   ingress {
     description     = "Allow SSH access from bastion host"
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
-    security_groups = [aws_security_group.bastion_host_sg.id] # Allow SSH acces from bastion host
+    security_groups = [aws_security_group.bastion_host_sg.id] # Allow SSH access from bastion host
   }
 
   ingress {
@@ -87,7 +96,7 @@ resource "aws_security_group" "private_hosts_sg" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = [data.aws_vpc.current_VPC.cidr_block] # Allow all acces within VPC
+    cidr_blocks = [data.aws_vpc.current_VPC.cidr_block] # Allow all access within VPC
   }
 
   egress {
